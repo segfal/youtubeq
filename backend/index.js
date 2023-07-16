@@ -7,6 +7,7 @@ const io = new Server(server);
 const cors = require('cors');
 cors(app);
 
+
 app.get('/', (req, res) => {
     res.send('<h1>Hello world</h1>');
 });
@@ -14,6 +15,26 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
+
+    socket.on('join', (room) => {
+        console.log('join', room);
+        socket.join(room);
+    }
+    );
+
+    socket.on('chat message', (msg) => {
+        io.emit('chat message', msg);
+    });
+    socket.on('join_room', (room) => {
+        socket.join(room);
+    }
+    );
+    socket.on('leave_room', (room) => {
+        socket.leave(room);
+    }
+    );
+    
+    
 });
 
 

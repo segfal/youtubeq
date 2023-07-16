@@ -1,35 +1,80 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+
+
+
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+} from "react-router-dom";
+import { useParams } from "react-router-dom";
+
+const Room = () => {
+  const navigate = useNavigate();
+  const [roomNumber, setRoomNumber] = useState("");
+ 
+
+  const changeRoom = () => {
+    navigate(`/room/${roomNumber}`);
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <input
+        type="text"
+        value={roomNumber}
+        onChange={(event) => setRoomNumber(event.target.value)}
+        placeholder="Enter Room Number"
+      />
+      <button onClick={changeRoom}>Switch Room</button>
+    </div>
+  );
+};
+
+const RoomComponent = ({ number }) => {
+  //get number
+  const world  = useParams();
+  
+  
+
+
+  return (
+    <div>
+      <h1>Room {world.number}</h1>
+      <Link to="/">Back</Link>
+    </div>
+  );
 }
 
-export default App
+const App = () => {
+  const [roomNumber, setRoomNumber] = useState(1);
+  const [roomgenerater, setRoomgenerater] = useState(1);
+  const urlgenerator = () => {
+    setRoomgenerater(roomNumber);
+  };
+
+
+  return (
+    <div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Room />} />
+        <Route path="/room/:number" element={<RoomComponent />} />
+        {/* Give user a link to the room */}
+      </Routes>
+    </Router>
+    <button onClick={urlgenerator}>Generate Room</button>
+    <h1>Room {roomgenerater}</h1>
+
+
+    </div>
+
+  );
+
+
+};
+
+export default App;
